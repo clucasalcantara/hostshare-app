@@ -33,30 +33,21 @@ export default function ListingPage({ params }: any) {
   const [scope] = useAnimate();
   const isInView = useInView(scope);
 
-  useEffect(() => {
-    if (isInView) {
-      controls.start("show");
-    }
-  }, [controls, isInView]);
+  const { data } = useQuery({
+    queryKey: ["listing", params.ref],
+    queryFn: async () =>
+      await fetch(`/api/listing?ref=${params.ref}`)
+        .then((result) => result.json())
+        .then((result) => {
+          setTimeout(() => controls.start("show"), 500);
 
-  const { data } = useQuery(
-    ["listings"],
-    async () =>
-      await fetch(`/api/listing?ref=${params.ref}`).then((result) =>
-        result.json()
-      ),
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage.data.page < lastPage.data.pages) {
-          return lastPage.data.page + 1;
-        }
-      },
-    }
-  );
+          return result;
+        }),
+  });
 
-  const { info: listing } = data || {};
+  const { info: listing } = data || ({} as any);
 
-  if (!listing) {
+  if (!data || !listing) {
     return <LoadingState />;
   }
 
@@ -68,7 +59,14 @@ export default function ListingPage({ params }: any) {
   });
 
   return (
-    <section className="w-full py-16 flex flex-col">
+    <motion.section
+      variants={item}
+      animate={controls}
+      initial={{ opacity: 0 }}
+      transition={{ repeat: Infinity, duration: 2 }}
+      ref={scope}
+      className="w-full py-16 flex flex-col"
+    >
       <div className="mx-28 flex flex-col">
         <div className="flex flex-col">
           <h1 className="text-[24pt] font-bold">{listing.title}</h1>
@@ -124,6 +122,6 @@ export default function ListingPage({ params }: any) {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
