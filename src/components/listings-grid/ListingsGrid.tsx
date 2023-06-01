@@ -15,7 +15,7 @@ const container = {
     },
   },
 };
-import getDistance from "@/utils/calculateCoordinatesDistance";
+
 import { useAppStore } from "@/store";
 import { uniqBy } from "lodash";
 
@@ -23,9 +23,7 @@ export default function ListingsGrid({ data = [] }: any) {
   const [location, setLocation] = useState<any>({});
   const {
     filters: { location: filterLocation },
-    setCache,
   } = useAppStore();
-
   const {
     data: response,
     isLoading,

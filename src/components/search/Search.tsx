@@ -57,7 +57,7 @@ export default function Search() {
           transparentDrop
           dropContent={<DateRange handleChange={setDateRange} />}
         />
-        <div className="relative w-full">
+        <div className="relative flex min-w-[250px]">
           <DropButton
             value={guestsAmount}
             label="Add guests"

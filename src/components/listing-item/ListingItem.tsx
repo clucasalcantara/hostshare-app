@@ -8,17 +8,21 @@ import {
   useInView,
 } from "framer-motion";
 import getDistance from "@/utils/calculateCoordinatesDistance";
+import { useRouter } from "next/navigation";
 
 export default function ListingItem({ info = [], from, to }: any) {
   const controls = useAnimationControls();
-  const [scope, animate] = useAnimate();
+  const [scope] = useAnimate();
   const isInView = useInView(scope);
+  const { push } = useRouter();
 
   useEffect(() => {
     if (isInView) {
       controls.start("show");
     }
   }, [isInView]);
+
+  console.log({ info });
 
   const item = {
     hidden: {
@@ -35,12 +39,13 @@ export default function ListingItem({ info = [], from, to }: any) {
 
   return (
     <motion.div
-      className="flex flex-col min-h-[300px]"
+      className="flex flex-col min-h-[300px] cursor-pointer"
       variants={item}
       animate={controls}
       initial={{ opacity: 0 }}
       transition={{ repeat: Infinity, duration: 2 }}
       ref={scope}
+      onClick={() => push(`/listing/${info.id}`)}
     >
       <Image
         className="rounded-2xl"

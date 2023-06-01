@@ -29,8 +29,6 @@ export default function PaxCounter({
   const [childrenQtd, setChildrenQtd] = useState(guestsConfig.childrenQtd || 0);
   const [infantsQtd, setInfantsQtd] = useState(guestsConfig.infantsQtd || 0);
 
-  console.log({ adultsQtd, childrenQtd, infantsQtd });
-
   useEffect(() => {
     handleCount(adultsQtd + childrenQtd + infantsQtd);
     handleConfig({ adultsQtd, childrenQtd, infantsQtd });
@@ -38,7 +36,7 @@ export default function PaxCounter({
   }, [adultsQtd, childrenQtd, handleCount, infantsQtd]);
 
   return (
-    <div className="flex flex-col divide-y">
+    <div className="flex flex-col divide-y flex-1">
       <div className="flex flex-row justify-between items-center py-6">
         <div className="flex flex-col items-start">
           <span className="font-bold">Adults</span>
@@ -49,8 +47,8 @@ export default function PaxCounter({
         </div>
       </div>
       <div className="flex flex-col divide-y">
-        <div className="flex flex-row justify-between items-center gap-16 py-6">
-          <div className="flex flex-col items-start">
+        <div className="flex flex-row justify-between items-center py-6">
+          <div className="flex flex-col items-start pr-16">
             <span className="font-bold">Children</span>
             <span className="text-gray-600 text-xs">Age 2-12</span>
           </div>
