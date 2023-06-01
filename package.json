@@ -1,0 +1,42 @@
+{
+  "name": "hostshare",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-google-maps/api": "^2.18.1",
+    "@tanstack/react-query": "^4.29.12",
+    "@tanstack/react-query-devtools": "^4.29.12",
+    "@types/node": "20.2.5",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "autoprefixer": "10.4.14",
+    "date-fns": "^2.30.0",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.4",
+    "framer-motion": "^10.12.16",
+    "lodash": "^4.17.21",
+    "next": "13.4.4",
+    "postcss": "8.4.24",
+    "react": "18.2.0",
+    "react-date-range": "^1.4.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.9.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-places-autocomplete": "^7.3.0",
+    "react-query": "^3.39.3",
+    "tailwindcss": "3.3.2",
+    "typescript": "5.0.4",
+    "zustand": "^4.3.8"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.195",
+    "@types/react-date-range": "^1.4.4",
+    "@types/react-places-autocomplete": "^7.2.9"
+  }
+}
