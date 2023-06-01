@@ -8,7 +8,7 @@ export default async function Home() {
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places&callback=Function.prototype`}
       />
-      <main className="flex min-h-full flex-col items-center justify-between p-24">
+      <main>
         {/* <ListingCategories categories={categories} /> */}
         <ListingsGrid />
       </main>

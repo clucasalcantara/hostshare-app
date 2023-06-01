@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -31,7 +30,6 @@ const item = {
 export default function ListingPage({ params }: any) {
   const controls = useAnimationControls();
   const [scope] = useAnimate();
-  const isInView = useInView(scope);
 
   const { data } = useQuery({
     queryKey: ["listing", params.ref],

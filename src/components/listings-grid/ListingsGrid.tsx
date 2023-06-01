@@ -66,40 +66,42 @@ export default function ListingsGrid() {
   const listing = filterLocation ? uniqBy(dataset, "ref") : dataset;
 
   return (
-    <InfiniteScroll
-      dataLength={pages.length * 20}
-      next={() => fetchNextPage()}
-      hasMore={!!(lastPageData?.page === pages.length)}
-      loader={isLoading && <h4>Loading...</h4>}
-    >
-      <div className="grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
-        {!isLoading &&
-          listing.length > 0 &&
-          listing.map(({ info, ref }: any, idx: number) => {
-            const from = {
-              latitude: location.latitude,
-              longitude: location.longitude,
-            };
-            const to = {
-              latitude: info.location.lat,
-              longitude: info.location.long,
-            };
+    <div className="pl-5 mx-4 lg:mx-24 py-2 lg:py-10">
+      <InfiniteScroll
+        dataLength={pages.length * 20}
+        next={() => fetchNextPage()}
+        hasMore={!!(lastPageData?.page === pages.length)}
+        loader={isLoading && <h4>Loading...</h4>}
+      >
+        <div className="grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+          {!isLoading &&
+            listing.length > 0 &&
+            listing.map(({ info, ref }: any, idx: number) => {
+              const from = {
+                latitude: location.latitude,
+                longitude: location.longitude,
+              };
+              const to = {
+                latitude: info.location.lat,
+                longitude: info.location.long,
+              };
 
-            return (
-              <ListingItem
-                key={`${ref}=${idx}`}
-                info={info}
-                to={to}
-                from={from}
-              />
-            );
-          })}
-        {!isLoading && !hasNextPage && (
-          <div className="self-center text-center">
-            <span className="font-bold">The End!</span> Yay! time to decide!
-          </div>
-        )}
-      </div>
-    </InfiniteScroll>
+              return (
+                <ListingItem
+                  key={`${ref}=${idx}`}
+                  info={info}
+                  to={to}
+                  from={from}
+                />
+              );
+            })}
+          {!isLoading && !hasNextPage && (
+            <div className="self-center text-center">
+              <span className="font-bold">The End!</span> Yay! time to decide!
+            </div>
+          )}
+        </div>
+      </InfiniteScroll>
+    </div>
   );
 }

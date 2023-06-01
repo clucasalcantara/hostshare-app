@@ -34,7 +34,7 @@ export default function Search() {
   };
 
   return (
-    <div className="flex flex-row justify-between rounded-full shadow-md shadow-[rgba(0,0,0,.1)] py-2 border items-center px-4 cursor-pointer flex-1 lg:max-w-[50%] w-full">
+    <div className="invisible flex flex-row justify-between rounded-full shadow-md shadow-[rgba(0,0,0,.1)] py-2 border items-center px-4 cursor-pointer flex-1 lg:max-w-[50%] w-full sm:visible">
       <div className="flex flex-row justify-between text-center mx-2 divide-x items-center gap-2 w-full">
         <div className="relative w-full">
           <DropButton
