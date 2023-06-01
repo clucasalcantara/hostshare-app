@@ -21,7 +21,10 @@ import { uniqBy } from "lodash";
 
 export default function ListingsGrid({ data = [] }: any) {
   const [location, setLocation] = useState<any>({});
-  const { filters: { location: filterLocation } = {} } = useAppStore();
+  const {
+    filters: { location: filterLocation },
+    setCache,
+  } = useAppStore();
 
   const {
     data: response,
@@ -64,8 +67,6 @@ export default function ListingsGrid({ data = [] }: any) {
 
   const { data: lastPageData } = pages.length && pages[pages.length - 1];
 
-  console.log({ hasNextPage });
-
   const dataset = pages.reduce((acc, next) => {
     return [...acc, ...next.data?.listings];
   }, []);
@@ -98,17 +99,16 @@ export default function ListingsGrid({ data = [] }: any) {
               longitude: info.location.long,
             };
 
-              return (
-                <ListingItem
-                  key={`${ref}=${idx}`}
-                  info={info}
-                  to={to}
-                  from={from}
-                />
-              );
-            }
-          )}
-          {!isLoading && !hasNextPage && (
+            return (
+              <ListingItem
+                key={`${ref}=${idx}`}
+                info={info}
+                to={to}
+                from={from}
+              />
+            );
+          })}
+        {!isLoading && !hasNextPage && (
           <div className="self-center text-center">
             <span className="font-bold">The End!</span> Yay! time to decide!
           </div>
