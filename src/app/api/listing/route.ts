@@ -11,5 +11,5 @@ export async function GET(request: Request) {
     return NextResponse.json({ listing });
   }
 
-  return NextResponse.json(404, { message: "Not found" });
+  return NextResponse.json(404, { message: "Not found" } as any);
 }

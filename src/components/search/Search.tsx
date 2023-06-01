@@ -11,7 +11,6 @@ import { LocationInput } from "../location-input";
 import truncate from "@/utils/truncate";
 import format from "date-fns/format";
 import { useAppStore } from "@/store";
-import { useQuery } from "@tanstack/react-query";
 
 export default function Search() {
   const [guestsAmount, setGuestsAmount] = useState(0);
@@ -72,7 +71,7 @@ export default function Search() {
           />
         </div>
       </div>
-      <div className="bg-black rounded-full" onClick={() => refetch()}>
+      <div className="bg-black rounded-full">
         <div className="bg-[#329a9a] w-[40px] h-[40px] rounded-full flex justify-center items-center hover:bg-opacity-80">
           <BiSearch color="white" size={22} />
         </div>

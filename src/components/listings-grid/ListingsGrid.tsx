@@ -65,7 +65,7 @@ export default function ListingsGrid({ data = [] }: any) {
 
   const { data: lastPageData } = pages.length && pages[pages.length - 1];
 
-  const dataset = pages.reduce((acc, next) => {
+  const dataset = (pages as []).reduce((acc: any, next: any) => {
     return [...acc, ...next.data?.listings];
   }, []);
 

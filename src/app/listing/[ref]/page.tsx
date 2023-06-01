@@ -3,7 +3,6 @@
 import { AiFillStar } from "react-icons/ai";
 import { IoMdShare, IoMdHeartEmpty } from "react-icons/io";
 import PhotoAlbum from "react-photo-album";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function ListingPage({ params }: any) {
@@ -11,13 +10,28 @@ export default function ListingPage({ params }: any) {
 
   useEffect(() => {
     const fetchListing = async () => {
-      const {
-        listing: { info },
-      } = await fetch(
-        `http://localhost:3000/api/listing?ref=${params.ref}`
-      ).then((res) => res.json());
+      const listingsEndpoint = process.env.NEXT_PUBLIC_VERCEL_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+        : "http://127.0.0.1:3000";
 
-      setListing(info);
+      try {
+        const res = await fetch(
+          `${listingsEndpoint}/api/listing?ref=${params.ref}`,
+          {
+            cache: "force-cache",
+          }
+        );
+
+        const {
+          listing: { info },
+        } = await res.json();
+        setListing(info);
+
+        return listing;
+      } catch (e) {
+        console.error(e);
+        return null;
+      }
     };
 
     fetchListing();
@@ -27,12 +41,14 @@ export default function ListingPage({ params }: any) {
     return null;
   }
 
-  const photogridData = listing.images.data.map((image: any) => {
+  const photogridData = listing.images?.data.map((image: any) => {
     return {
       ...image,
       src: image.url,
     };
   });
+
+  console.log({ listing });
 
   return (
     <section className="w-full py-16 flex flex-col">
@@ -43,7 +59,7 @@ export default function ListingPage({ params }: any) {
             <div className="w-[80%] flex flex-row gap-4 items-center py-4 divide-x">
               <div className="flex flex-row items-center gap-1 px-4">
                 <AiFillStar />
-                <span>{listing.ratings.guestSatisfactionOverall}</span>
+                <span>{listing.ratings?.guestSatisfactionOverall}</span>
               </div>
               <div className="flex flex-row items-center gap-1 px-4">
                 <span className="underline text-black">
@@ -52,7 +68,7 @@ export default function ListingPage({ params }: any) {
               </div>
               <div className="flex flex-row items-center gap-1 px-4">
                 <span className="text-black">
-                  {`${listing.location.address} ${listing.location.city}, ${listing.location.country.title}`}
+                  {`${listing.location?.address} ${listing.location?.city}, ${listing.location?.country.title}`}
                 </span>
               </div>
             </div>
@@ -70,7 +86,7 @@ export default function ListingPage({ params }: any) {
         </div>
         <div className="max-h-[530px] overflow-hidden flex flex-row">
           <div className="w-full max-h-[530px]">
-            <img src={listing.mainImage.url} alt="main image" />
+            <img src={listing.mainImage?.url} alt="main image" />
           </div>
           <div className="w-full max-h-[580px]  overflow-hidden">
             <PhotoAlbum layout="rows" photos={photogridData} />
@@ -79,10 +95,10 @@ export default function ListingPage({ params }: any) {
         <div className="mt-8 w-full flex flex-row justify-between">
           <div>
             <h3 className="text-[14pt] font-bold">
-              Entire {listing.type} hosted by {listing.host.name}
+              Entire {listing.type} hosted by {listing.host?.name}
             </h3>
             <div className="flex-0 flex-row justify-between gap-4 divide-x mt-2 ml-[-10px]">
-              {listing.details.data.map((detail: any) => (
+              {listing.details?.data.map((detail: any) => (
                 <span key={detail.type} className="px-3">
                   {detail.value} {detail.type}
                 </span>
