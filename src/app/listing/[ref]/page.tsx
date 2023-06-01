@@ -1,44 +1,63 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import {
+  motion,
+  useAnimate,
+  useAnimationControls,
+  useInView,
+} from "framer-motion";
+
 import { AiFillStar } from "react-icons/ai";
 import { IoMdShare, IoMdHeartEmpty } from "react-icons/io";
 import PhotoAlbum from "react-photo-album";
-import { useEffect, useState } from "react";
+import { LoadingState } from "@/components/loading-state";
+
+const item = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    transition: { ease: [0.78, 0.14, 0.15, 0.86] },
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { ease: [0.78, 0.14, 0.15, 0.86] },
+  },
+};
 
 export default function ListingPage({ params }: any) {
-  const [listing, setListing] = useState<any>(null);
+  const controls = useAnimationControls();
+  const [scope] = useAnimate();
+  const isInView = useInView(scope);
 
   useEffect(() => {
-    const fetchListing = async () => {
-      const listingsEndpoint = process.env.NEXT_PUBLIC_VERCEL_URL
-        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-        : "http://127.0.0.1:3000";
+    if (isInView) {
+      controls.start("show");
+    }
+  }, [controls, isInView]);
 
-      try {
-        const res = await fetch(
-          `${listingsEndpoint}/api/listing?ref=${params.ref}`,
-          {
-            cache: "force-cache",
-          }
-        );
+  const { data } = useQuery(
+    ["listings"],
+    async () =>
+      await fetch(`/api/listing?ref=${params.ref}`).then((result) =>
+        result.json()
+      ),
+    {
+      getNextPageParam: (lastPage) => {
+        if (lastPage.data.page < lastPage.data.pages) {
+          return lastPage.data.page + 1;
+        }
+      },
+    }
+  );
 
-        const {
-          listing: { info },
-        } = await res.json();
-        setListing(info);
-
-        return listing;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    };
-
-    fetchListing();
-  }, []);
+  const { info: listing } = data || {};
 
   if (!listing) {
-    return null;
+    return <LoadingState />;
   }
 
   const photogridData = listing.images?.data.map((image: any) => {
@@ -47,8 +66,6 @@ export default function ListingPage({ params }: any) {
       src: image.url,
     };
   });
-
-  console.log({ listing });
 
   return (
     <section className="w-full py-16 flex flex-col">
@@ -88,9 +105,9 @@ export default function ListingPage({ params }: any) {
           <div className="w-full max-h-[530px]">
             <img src={listing.mainImage?.url} alt="main image" />
           </div>
-          <div className="w-full max-h-[580px]  overflow-hidden">
+          <motion.div className="w-full max-h-[580px]  overflow-hidden">
             <PhotoAlbum layout="rows" photos={photogridData} />
-          </div>
+          </motion.div>
         </div>
         <div className="mt-8 w-full flex flex-row justify-between">
           <div>

@@ -2,24 +2,14 @@
 import { useEffect, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { motion } from "framer-motion";
 
 import { ListingItem } from "../listing-item";
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.5,
-    },
-  },
-};
-
 import { useAppStore } from "@/store";
 import { uniqBy } from "lodash";
+import { LoadingState } from "../loading-state";
 
-export default function ListingsGrid({ data = [] }: any) {
+export default function ListingsGrid() {
   const [location, setLocation] = useState<any>({});
   const {
     filters: { location: filterLocation },
@@ -63,6 +53,10 @@ export default function ListingsGrid({ data = [] }: any) {
     refetch();
   }, [filterLocation, refetch]);
 
+  if (!pages?.length) {
+    return <LoadingState />;
+  }
+
   const { data: lastPageData } = pages.length && pages[pages.length - 1];
 
   const dataset = (pages as []).reduce((acc: any, next: any) => {
@@ -78,13 +72,7 @@ export default function ListingsGrid({ data = [] }: any) {
       hasMore={!!(lastPageData?.page === pages.length)}
       loader={isLoading && <h4>Loading...</h4>}
     >
-      <motion.div
-        initial="hidden"
-        animate="show"
-        layout
-        className="grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4"
-        variants={container}
-      >
+      <div className="grid md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
         {!isLoading &&
           listing.length > 0 &&
           listing.map(({ info, ref }: any, idx: number) => {
@@ -111,7 +99,7 @@ export default function ListingsGrid({ data = [] }: any) {
             <span className="font-bold">The End!</span> Yay! time to decide!
           </div>
         )}
-      </motion.div>
+      </div>
     </InfiniteScroll>
   );
 }

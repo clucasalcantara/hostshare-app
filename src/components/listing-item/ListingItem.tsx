@@ -20,9 +20,7 @@ export default function ListingItem({ info = [], from, to }: any) {
     if (isInView) {
       controls.start("show");
     }
-  }, [isInView]);
-
-  console.log({ info });
+  }, [controls, isInView]);
 
   const item = {
     hidden: {

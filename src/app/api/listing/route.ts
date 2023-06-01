@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const listing = listings.find((listing: any) => listing.info.id === ref);
 
   if (listing) {
-    return NextResponse.json({ listing });
+    return NextResponse.json(listing);
   }
 
   return NextResponse.json(404, { message: "Not found" } as any);
